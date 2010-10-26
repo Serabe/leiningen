@@ -71,8 +71,10 @@
   :warn-on-reflection true
   ;; Set this in order to only use the :repositories you list below.
   :omit-default-repositories true
-  :repositories { "java.net" "http://download.java.net/maven/2"
-                  "modularity" "http://m2.modularity.net.au/releases"}
+  :repositories {"java.net" "http://download.java.net/maven/2"
+                 "private" {:url "http://private.repo"
+                            :username "milgrim"
+                            :password "locative.1"}}
   ;; If you'd rather use a different directory structure, you can set these.
   :source-path "src/main/clojure"
   :library-path "target/dependency"
@@ -90,4 +92,6 @@
   ;; Set arbitrary key/value pairs for the jar's manifest.
   :manifest {"Project-awesome-level" "super-great"}
   ;; You can set JVM-level options here.
-  :jvm-opts ["-Xmx1g"])
+  :jvm-opts ["-Xmx1g"]
+  ;; If your project is a Leiningen plugin, set this to skip the subprocess step
+  :eval-in-leiningen false)

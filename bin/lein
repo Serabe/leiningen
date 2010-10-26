@@ -9,7 +9,7 @@ esac
 
 # Make sure classpath is in unix format for manipulating, then put
 # it back to windows format when we use it
-if [ "$OSTYPE" = "cygwin" ] && [ $CLASSPATH != "" ]; then
+if [ "$OSTYPE" = "cygwin" ] && [ "$CLASSPATH" != "" ]; then
     CLASSPATH=`cygpath -up $CLASSPATH`
 fi
 
@@ -36,7 +36,7 @@ fi
 
 LEIN_PLUGINS="$(ls -1 lib/dev/*jar 2> /dev/null | tr \\n \:)"
 LEIN_USER_PLUGINS="$(ls -1 $LEIN_HOME/plugins/*jar 2> /dev/null | tr \\n \:)"
-CLASSPATH=$LEIN_USER_PLUGINS:$LEIN_PLUGINS:src/:$CLASSPATH
+CLASSPATH=$LEIN_USER_PLUGINS:$LEIN_PLUGINS:test/:src/:$CLASSPATH
 LEIN_JAR="$HOME/.m2/repository/leiningen/leiningen/$LEIN_VERSION/leiningen-$LEIN_VERSION-standalone.jar"
 # CLOJURE_JAR="$HOME/.m2/repository/org/clojure/clojure/1.2.0/clojure-1.2.0.jar"
 NULL_DEVICE=/dev/null
@@ -162,6 +162,7 @@ else
     # TODO: add more to the boot classpath
     test $CYGWIN_JLINE && stty -icanon min 1 -echo
     exec $RLWRAP $JAVA_CMD -Xbootclasspath/a:"$CLOJURE_JAR" -client $JAVA_OPTS \
+        -Dleiningen.original.pwd=$ORIGINAL_PWD \
         -cp "$CLASSPATH" $JLINE clojure.main -e "(use 'leiningen.core)(-main)" \
         $NULL_DEVICE $@
     test $CYGWIN_JLINE && stty icanon echo
